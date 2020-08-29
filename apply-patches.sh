@@ -2,6 +2,9 @@
 
 set -e
 
+# superugly
+find_args="! -name 0005-halium-get-rid-of-using-AudioFlinger-for-recording.patch ! -name 0006-halium-Enable-video-and-audio-recording-from-camera.patch"
+
 MB=$1
 
 USE_PATCH=0
@@ -13,15 +16,17 @@ OLD_WD=`pwd`
 cd hybris-patches
 
 if [ "$USE_PATCH" == "1" ]; then
-    for patch in `find . -name *.patch |sort`; do
+    for patch in `find . -name *.patch $find_args |sort`; do
         cd $OLD_WD/$(dirname $patch)
         patch -p1 < $OLD_WD/hybris-patches/$patch
     done
 else
-    MBS=$(find . -name *.patch -exec dirname {} \; |sort -u)
+    MBS=$(find . -name *.patch $find_args -exec dirname {} \; |sort -u)
     for mb in $MBS; do
         cd $OLD_WD/$mb
-        git am --no-gpg-sign $OLD_WD/hybris-patches/$mb/*.patch
+	for patch in `find $OLD_WD/hybris-patches/$mb $find_args -type f -printf "%f\n" | sort`; do
+      	    git am --no-gpg-sign $OLD_WD/hybris-patches/$mb/$patch
+        done
     done
 fi
 
