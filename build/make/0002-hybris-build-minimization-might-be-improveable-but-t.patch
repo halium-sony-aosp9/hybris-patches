@@ -1,19 +1,19 @@
-From 7f4bafbef13272a5c691c6e2ea0855e4790f5464 Mon Sep 17 00:00:00 2001
+From 1dba61e7803e8f88b8edf58b990f1af8616e61b7 Mon Sep 17 00:00:00 2001
 From: Franz-Josef Haider <franz.haider@jolla.com>
 Date: Thu, 7 Jun 2018 15:32:40 +0000
-Subject: [PATCH 2/5] (hybris) build minimization (might be improveable, but
+Subject: [PATCH 2/3] (hybris) build minimization (might be improveable, but
  this version doesn't break dependancies)
 
 Change-Id: Ic862dc084f5f4e3fa7ccd90b0757deff0f17b802
 ---
- core/dex_preopt.mk                      | 109 +------
- core/droiddoc.mk                        | 368 +-----------------------
- core/host_dalvik_java_library.mk        | 225 +--------------
- core/host_dalvik_static_java_library.mk |  29 +-
- core/java_library.mk                    | 105 +------
+ core/dex_preopt.mk                      | 109 +---------
+ core/droiddoc.mk                        | 368 +-------------------------------
+ core/host_dalvik_java_library.mk        | 225 +------------------
+ core/host_dalvik_static_java_library.mk |  29 +--
+ core/java_library.mk                    | 105 +--------
  core/main.mk                            |   3 +
- core/package.mk                         |  85 +-----
- core/static_java_library.mk             | 238 +--------------
+ core/package.mk                         |  85 +-------
+ core/static_java_library.mk             | 238 +--------------------
  8 files changed, 10 insertions(+), 1152 deletions(-)
  mode change 100644 => 120000 core/dex_preopt.mk
  mode change 100644 => 120000 core/droiddoc.mk
@@ -25,7 +25,7 @@ Change-Id: Ic862dc084f5f4e3fa7ccd90b0757deff0f17b802
 
 diff --git a/core/dex_preopt.mk b/core/dex_preopt.mk
 deleted file mode 100644
-index 17df08de6..000000000
+index 7298bde..0000000
 --- a/core/dex_preopt.mk
 +++ /dev/null
 @@ -1,108 +0,0 @@
@@ -66,7 +66,7 @@ index 17df08de6..000000000
 -# Conditional to building on linux, as dex2oat currently does not work on darwin.
 -ifeq ($(HOST_OS),linux)
 -  WITH_DEXPREOPT ?= true
--  ifneq (user,$(TARGET_BUILD_VARIANT))
+-  ifeq (eng,$(TARGET_BUILD_VARIANT))
 -    # Don't strip for quick development turnarounds.
 -    DEX_PREOPT_DEFAULT := nostripping
 -    # For an eng build only pre-opt the boot image and system server. This gives reasonable performance
@@ -139,7 +139,7 @@ index 17df08de6..000000000
 -endif
 diff --git a/core/dex_preopt.mk b/core/dex_preopt.mk
 new file mode 120000
-index 000000000..97f5a792a
+index 0000000..97f5a79
 --- /dev/null
 +++ b/core/dex_preopt.mk
 @@ -0,0 +1 @@
@@ -147,7 +147,7 @@ index 000000000..97f5a792a
 \ No newline at end of file
 diff --git a/core/droiddoc.mk b/core/droiddoc.mk
 deleted file mode 100644
-index bcd2002e0..000000000
+index bcd2002..0000000
 --- a/core/droiddoc.mk
 +++ /dev/null
 @@ -1,367 +0,0 @@
@@ -520,7 +520,7 @@ index bcd2002e0..000000000
 -endif #!LOCAL_UNINSTALLABLE_MODULE
 diff --git a/core/droiddoc.mk b/core/droiddoc.mk
 new file mode 120000
-index 000000000..97f5a792a
+index 0000000..97f5a79
 --- /dev/null
 +++ b/core/droiddoc.mk
 @@ -0,0 +1 @@
@@ -528,7 +528,7 @@ index 000000000..97f5a792a
 \ No newline at end of file
 diff --git a/core/host_dalvik_java_library.mk b/core/host_dalvik_java_library.mk
 deleted file mode 100644
-index 1ef0ccb17..000000000
+index 1ef0ccb..0000000
 --- a/core/host_dalvik_java_library.mk
 +++ /dev/null
 @@ -1,224 +0,0 @@
@@ -758,7 +758,7 @@ index 1ef0ccb17..000000000
 -endif
 diff --git a/core/host_dalvik_java_library.mk b/core/host_dalvik_java_library.mk
 new file mode 120000
-index 000000000..97f5a792a
+index 0000000..97f5a79
 --- /dev/null
 +++ b/core/host_dalvik_java_library.mk
 @@ -0,0 +1 @@
@@ -766,7 +766,7 @@ index 000000000..97f5a792a
 \ No newline at end of file
 diff --git a/core/host_dalvik_static_java_library.mk b/core/host_dalvik_static_java_library.mk
 deleted file mode 100644
-index 78faf73a5..000000000
+index 78faf73..0000000
 --- a/core/host_dalvik_static_java_library.mk
 +++ /dev/null
 @@ -1,28 +0,0 @@
@@ -800,7 +800,7 @@ index 78faf73a5..000000000
 -LOCAL_IS_STATIC_JAVA_LIBRARY :=
 diff --git a/core/host_dalvik_static_java_library.mk b/core/host_dalvik_static_java_library.mk
 new file mode 120000
-index 000000000..97f5a792a
+index 0000000..97f5a79
 --- /dev/null
 +++ b/core/host_dalvik_static_java_library.mk
 @@ -0,0 +1 @@
@@ -808,7 +808,7 @@ index 000000000..97f5a792a
 \ No newline at end of file
 diff --git a/core/java_library.mk b/core/java_library.mk
 deleted file mode 100644
-index 1b914f5ba..000000000
+index 1b914f5..0000000
 --- a/core/java_library.mk
 +++ /dev/null
 @@ -1,104 +0,0 @@
@@ -918,17 +918,17 @@ index 1b914f5ba..000000000
 -endif # !LOCAL_IS_STATIC_JAVA_LIBRARY
 diff --git a/core/java_library.mk b/core/java_library.mk
 new file mode 120000
-index 000000000..97f5a792a
+index 0000000..97f5a79
 --- /dev/null
 +++ b/core/java_library.mk
 @@ -0,0 +1 @@
 +clear_vars.mk
 \ No newline at end of file
 diff --git a/core/main.mk b/core/main.mk
-index 97ec295f8..5f3ffd7ae 100644
+index 1946edb..035856b 100644
 --- a/core/main.mk
 +++ b/core/main.mk
-@@ -466,6 +466,9 @@ subdir_makefiles_total := $(words $(subdir_makefiles))
+@@ -455,6 +455,9 @@ subdir_makefiles_total := $(words $(subdir_makefiles))
  
  $(foreach mk,$(subdir_makefiles),$(info [$(call inc_and_print,subdir_makefiles_inc)/$(subdir_makefiles_total)] including $(mk) ...)$(eval include $(mk)))
  
@@ -940,7 +940,7 @@ index 97ec295f8..5f3ffd7ae 100644
  include $(BUILD_SYSTEM)/pdk_fusion_modules.mk
 diff --git a/core/package.mk b/core/package.mk
 deleted file mode 100644
-index f3713fcf7..000000000
+index f3713fc..0000000
 --- a/core/package.mk
 +++ /dev/null
 @@ -1,84 +0,0 @@
@@ -1030,7 +1030,7 @@ index f3713fcf7..000000000
 -my_module_arch_supported :=
 diff --git a/core/package.mk b/core/package.mk
 new file mode 120000
-index 000000000..97f5a792a
+index 0000000..97f5a79
 --- /dev/null
 +++ b/core/package.mk
 @@ -0,0 +1 @@
@@ -1038,7 +1038,7 @@ index 000000000..97f5a792a
 \ No newline at end of file
 diff --git a/core/static_java_library.mk b/core/static_java_library.mk
 deleted file mode 100644
-index 0429dd2d2..000000000
+index 0429dd2..0000000
 --- a/core/static_java_library.mk
 +++ /dev/null
 @@ -1,237 +0,0 @@
@@ -1281,12 +1281,13 @@ index 0429dd2d2..000000000
 -LOCAL_IS_STATIC_JAVA_LIBRARY :=
 diff --git a/core/static_java_library.mk b/core/static_java_library.mk
 new file mode 120000
-index 000000000..97f5a792a
+index 0000000..97f5a79
 --- /dev/null
 +++ b/core/static_java_library.mk
 @@ -0,0 +1 @@
 +clear_vars.mk
 \ No newline at end of file
 -- 
-2.17.1
+2.7.4
+
 

@@ -1,22 +1,24 @@
-From 1849c79f3e1a1c90ee9b40e485725c77adf6a9c4 Mon Sep 17 00:00:00 2001
+From 89879a92b37666f69dfb4a8f41037ff07b2ca6a3 Mon Sep 17 00:00:00 2001
 From: David Greaves <david@dgreaves.com>
 Date: Wed, 20 Nov 2013 19:24:31 +0000
-Subject: [PATCH 08/44] (hybris) Notify Mer's systemd that we're done
+Subject: [PATCH 08/41] (hybris) Notify Mer's systemd that we're done
 
 Change-Id: If6a16f43397f00c8e579af79ae6cf8459786e7b3
 Signed-off-by: David Greaves <david.greaves@jollamobile.com>
 ---
- rootdir/init.rc | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ rootdir/init.rc | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
 diff --git a/rootdir/init.rc b/rootdir/init.rc
-index 5bed0e34b..7cb3685c0 100644
+index baba9cc6d..74389e016 100644
 --- a/rootdir/init.rc
 +++ b/rootdir/init.rc
-@@ -764,3 +764,12 @@ service flash_recovery /system/bin/install-recovery.sh
- on property:persist.sys.recovery_update=true
-     start flash_recovery
- 
+@@ -757,3 +757,19 @@ on property:ro.debuggable=1
+ service flash_recovery /system/bin/install-recovery.sh
+     class main
+     oneshot
++    disabled
++
 +# This trigger is run by our modified init after boot has finished
 +on ready
 +    class_start mer
@@ -26,6 +28,10 @@ index 5bed0e34b..7cb3685c0 100644
 +service droid_init_done /bin/sh /usr/bin/droid/droid-init-done.sh
 +    class mer
 +    oneshot
++
++# update recovery if enabled
++on property:persist.sys.recovery_update=true
++    start flash_recovery
++
 -- 
-2.17.1
-
+2.20.1
